@@ -50,5 +50,8 @@ test("clean fixture produces zero diagnostics", () => {
   const { stdout, stderr, status } = runOxlint("clean.tsx");
   const output = stdout + stderr;
   assert.equal(status, 0, `expected exit 0\n--- oxlint output ---\n${output}`);
-  assert.ok(!/warning|error/.test(output), `expected no diagnostics\n--- oxlint output ---\n${output}`);
+  // Diagnostic lines look like "file:1:1: warning rule(name): ...". The
+  // "Found 0 warnings and 0 errors." summary (printed on some platforms)
+  // must not count as a diagnostic.
+  assert.ok(!/:\s(warning|error)\s/.test(output), `expected no diagnostics\n--- oxlint output ---\n${output}`);
 });
