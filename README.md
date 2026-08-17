@@ -128,6 +128,27 @@ If any of these are load-bearing for you, run a slimmed ESLint config alongside 
 those rules (use [`eslint-plugin-oxlint`](https://github.com/oxc-project/eslint-plugin-oxlint) to
 turn off everything oxlint already covers).
 
+## Pairs well with: anti-slop
+
+[anti-slop](https://github.com/dmmulroy/anti-slop) is a set of opinionated, generic TypeScript
+Oxlint rules (no `unknown` params/returns, no `Record<string, unknown>`, a `// SAFETY:` comment on
+every `as`, no `jest.mock`, ...). It is deliberately **not** part of this preset — it isn't Expo-
+or RN-specific, and its author intends it to be vendored and edited per repo rather than
+depended on. Install it into your app alongside this preset with:
+
+```sh
+npx skills add dmmulroy/anti-slop --skill install-anti-slop
+```
+
+Expect these rules to fire on ordinary Expo/RN code — soften or disable them per project:
+
+- `anti-slop/no-module-mocking` — `jest.mock("expo-*")` / `jest.mock("react-native-reanimated")`
+  is standard in `jest-expo` tests.
+- `anti-slop/no-conditional-empty-object-spread` — `...(Platform.OS === "ios" ? { ... } : {})`
+  in styles/props.
+- `anti-slop/no-runtime-typeof` — `typeof window !== "undefined"` web-platform guards.
+- `anti-slop/require-safety-comment-for-type-assertion` — `route.params as X` and friends.
+
 ## Migrating existing `eslint-disable` comments
 
 Because Oxlint reserves the `react-hooks` namespace, this preset loads the plugin as
