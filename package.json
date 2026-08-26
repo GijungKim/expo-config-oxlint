@@ -41,7 +41,7 @@
   "dependencies": {
     "eslint-plugin-expo": "^1.1.0",
     "eslint-plugin-react-hooks": "^7.0.0",
-    "oxlint-config-universe": "^0.0.3",
+    "oxlint-config-universe": "^0.2.0",
     "oxlint-plugin-react-native": "^0.2.26"
   },
   "peerDependencies": {
