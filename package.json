@@ -1,6 +1,6 @@
 {
   "name": "expo-config-oxlint",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Oxlint preset for Expo apps: Expo's oxlint-config-universe/native plus the React Compiler rules (eslint-plugin-react-hooks) and Expo's lint rules via Oxlint JS plugins",
   "type": "module",
   "main": "index.js",
