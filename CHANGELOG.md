@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 - 2026-09-01
 
 - Upgrade `oxlint-config-universe` to `0.2.0` and require Oxlint `1.79` or newer.
 - Disable the native React hooks/compiler ports added in Oxlint 1.79 in favor of the
