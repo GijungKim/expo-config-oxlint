@@ -15,13 +15,13 @@ included — runs about **2× faster than ESLint**, and the native-rule portion 
 
 ## Status: bridge package
 
-Expo is [migrating its own monorepo to oxlint/oxfmt](https://github.com/expo/expo/pull/47096), but
-`eslint-config-expo` (the app-facing config) and the official docs are still ESLint.
-`oxlint-config-universe` now exposes native Oxlint ports of most React hooks/compiler rules; this
-package deliberately uses the React team's JS-plugin implementations instead, disables the native
-overlaps, and adds the remaining React and Expo rules. It bridges the gap **until Expo ships
-official app-facing oxlint support** — at which point you should switch to theirs (and this README
-will say so in bold).
+Expo has [migrated nearly all packages in its monorepo to
+Oxlint/Oxfmt](https://github.com/expo/expo/pull/47096), but `npx expo lint`,
+`eslint-config-expo` (the app-facing config), and the official app docs are still ESLint-based.
+Oxlint now ships native ports of most React hooks/compiler rules; this package deliberately uses
+the React team's JS-plugin implementations instead, disables the native overlaps, and adds the
+remaining React and Expo rules. It bridges the gap **until Expo ships official app-facing Oxlint
+support** — at which point you should switch to theirs (and this README will say so in bold).
 
 Also note: Oxlint JS plugins are **alpha**. The wiring here is conformance-tested (see
 `test/`), but expect the occasional breakage on oxlint upgrades. Pin your oxlint version.
