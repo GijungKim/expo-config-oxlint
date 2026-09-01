@@ -1,8 +1,8 @@
 # expo-config-oxlint
 
 [Oxlint](https://oxc.rs) preset for Expo apps. Extends Expo's own
-[`oxlint-config-universe/native`](https://github.com/expo/oxlint-config-universe) and adds the
-pieces it doesn't cover — the full
+[`oxlint-config-universe/native`](https://github.com/expo/oxlint-config-universe) and layers in the
+full
 [`eslint-plugin-react-hooks`](https://react.dev/reference/eslint-plugin-react-hooks) v7 rule set
 (**including the React Compiler rules**: `immutability`, `purity`, `refs`, `set-state-in-effect`,
 `preserve-manual-memoization`, ...) and the
@@ -16,10 +16,12 @@ included — runs about **2× faster than ESLint**, and the native-rule portion 
 ## Status: bridge package
 
 Expo is [migrating its own monorepo to oxlint/oxfmt](https://github.com/expo/expo/pull/47096), but
-`eslint-config-expo` (the app-facing config) and the official docs are still ESLint, and
-`oxlint-config-universe` intentionally omits the react-hooks/compiler rules. This package bridges
-that gap **until Expo ships official app-facing oxlint support** — at which point you should
-switch to theirs (and this README will say so in bold).
+`eslint-config-expo` (the app-facing config) and the official docs are still ESLint.
+`oxlint-config-universe` now exposes native Oxlint ports of most React hooks/compiler rules; this
+package deliberately uses the React team's JS-plugin implementations instead, disables the native
+overlaps, and adds the remaining React and Expo rules. It bridges the gap **until Expo ships
+official app-facing oxlint support** — at which point you should switch to theirs (and this README
+will say so in bold).
 
 Also note: Oxlint JS plugins are **alpha**. The wiring here is conformance-tested (see
 `test/`), but expect the occasional breakage on oxlint upgrades. Pin your oxlint version.
@@ -88,7 +90,7 @@ export default defineConfig({
 | Layer | Source | Rules |
 |---|---|---|
 | Oxlint native rules for RN/Expo | `oxlint-config-universe/native` (Expo-maintained) | eslint core, typescript, react, jsx-a11y, ... |
-| React hooks + **React Compiler** | `eslint-plugin-react-hooks@7` via JS plugin, namespace `react-hooks-js` | all 17 `recommended-latest` rules |
+| React hooks + **React Compiler** | `eslint-plugin-react-hooks@7` via JS plugin, namespace `react-hooks-js` | all 17 `recommended-latest` rules; overlapping native Oxlint ports are disabled |
 | Expo rules | `eslint-plugin-expo` via JS plugin, namespace `expo-js` | `use-dom-exports`, `no-env-var-destructuring`, `no-dynamic-env-var` (the set `eslint-config-expo` enables) |
 | React Native style rules (opt-in) | [`oxlint-plugin-react-native`](https://github.com/huextrat/oxlint-plugin-react-native), namespace `react-native` | `no-inline-styles`, `no-unused-styles`, `no-single-element-style-arrays` via the `reactNativeConfig` fragment |
 
@@ -170,7 +172,8 @@ independent if you run both during a transition.)
 `npm test` lints fixture files with known violations through the real published packages and
 asserts each layer fires: `rules-of-hooks`, `exhaustive-deps`, the compiler rules
 (`set-state-in-render`, `set-state-in-effect`), and the expo rules (`no-dynamic-env-var`,
-`no-env-var-destructuring`) — plus a clean file that must produce zero diagnostics.
+`no-env-var-destructuring`) — while asserting native ports do not duplicate them, plus a clean
+file that must produce zero diagnostics.
 
 ## License
 
