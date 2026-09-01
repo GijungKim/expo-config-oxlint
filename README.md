@@ -26,6 +26,30 @@ will say so in bold).
 Also note: Oxlint JS plugins are **alpha**. The wiring here is conformance-tested (see
 `test/`), but expect the occasional breakage on oxlint upgrades. Pin your oxlint version.
 
+## How this differs from Expo's Oxlint setup
+
+[Expo PR #47096](https://github.com/expo/expo/pull/47096) moved packages in Expo's own
+monorepo from ESLint/Prettier to Oxlint/Oxfmt. That is strong validation of the toolchain, but it
+is not an app-facing replacement for this preset: [`npx expo
+lint`](https://github.com/expo/expo/blob/main/packages/%40expo/cli/src/lint/lintAsync.ts) still
+bootstraps and runs ESLint for Expo apps.
+
+Both setups start from `oxlint-config-universe/native`, but they target different codebases:
+
+| | [Expo's `expo-module-scripts` base](https://github.com/expo/expo/blob/main/packages/expo-module-scripts/oxlint.config.base.js) | `expo-config-oxlint` |
+|---|---|---|
+| Intended for | Maintaining Expo's monorepo packages and Expo modules | Application code in ordinary Expo projects |
+| React hooks/compiler | Native Oxlint rules, with compiler-derived rules disabled where Expo's existing code has untriaged violations | All 17 rules from the React team's `recommended-latest` config; overlapping native rules are disabled to prevent duplicate diagnostics |
+| Expo-specific rules | Does not load the `eslint-plugin-expo` JS plugin | Loads the three Expo rules enabled by `eslint-config-expo` |
+| React Native style rules | Not included | Available through the opt-in `reactNativeConfig` fragment |
+| Project policy | Expo-monorepo ignores, test exceptions, and rule relaxations | A reusable app preset without Expo's repository-specific exceptions |
+| Formatting | Runs Oxfmt through `expo-module format` | Lint-only; pair it with Oxfmt or your formatter of choice |
+
+If you are working inside Expo's monorepo or using its module toolchain, use Expo's base. If you
+are replacing `eslint-config-expo` in an Expo app and want its Expo rules plus the complete React
+Compiler lint set, use this package. If Expo later ships an official app-facing Oxlint preset,
+the exported `jsPluginConfig` can be composed on top of it during migration.
+
 ## Install
 
 ```sh
