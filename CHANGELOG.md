@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Upgrade `oxlint-config-universe` to `0.2.0` and require Oxlint `1.79` or newer.
+- Disable the native React hooks/compiler ports added in Oxlint 1.79 in favor of the
+  `eslint-plugin-react-hooks` implementations, preventing duplicate diagnostics.
+- Update `oxlint-plugin-react-native` and its Oxlint plugin runtime to `0.2.33` / `1.80.0`.
+
 ## 0.1.0
 
 Initial release.

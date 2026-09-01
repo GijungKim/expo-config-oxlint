@@ -103,12 +103,25 @@ const config = {
     ...(native.rules ?? {}),
     ...reactHooksRules,
     ...expoRules,
-    // Oxlint ships native ports of these two; the base preset enables them.
-    // The JS-plugin versions above are the React team's current
-    // implementations — disable the native ports so each violation is
-    // reported once.
-    "react-hooks/rules-of-hooks": "off",
-    "react-hooks/exhaustive-deps": "off",
+    // Oxlint ships native ports for most react-hooks/compiler rules. Its
+    // correctness category enables many of them by default. Prefer the React
+    // team's JS-plugin implementations above and disable every native overlap
+    // so each violation is reported exactly once.
+    "react/rules-of-hooks": "off",
+    "react/exhaustive-deps": "off",
+    "react/error-boundaries": "off",
+    "react/globals": "off",
+    "react/immutability": "off",
+    "react/incompatible-library": "off",
+    "react/preserve-manual-memoization": "off",
+    "react/purity": "off",
+    "react/refs": "off",
+    "react/set-state-in-effect": "off",
+    "react/set-state-in-render": "off",
+    "react/static-components": "off",
+    "react/unsupported-syntax": "off",
+    "react/use-memo": "off",
+    "react/void-use-memo": "off",
   },
 };
 

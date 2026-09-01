@@ -4,9 +4,29 @@ import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
+import config from "../index.js";
+
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const fixtureDir = path.join(testDir, "fixture");
 const oxlintBin = path.join(testDir, "..", "node_modules", ".bin", "oxlint");
+
+const nativeReactOverlaps = [
+  "react/rules-of-hooks",
+  "react/exhaustive-deps",
+  "react/error-boundaries",
+  "react/globals",
+  "react/immutability",
+  "react/incompatible-library",
+  "react/preserve-manual-memoization",
+  "react/purity",
+  "react/refs",
+  "react/set-state-in-effect",
+  "react/set-state-in-render",
+  "react/static-components",
+  "react/unsupported-syntax",
+  "react/use-memo",
+  "react/void-use-memo",
+];
 
 function runOxlint(...files) {
   const result = spawnSync(oxlintBin, ["-c", "oxlint.config.mjs", ...files], {
@@ -38,12 +58,25 @@ test("violations fixture triggers every layer of the preset", () => {
     assert.ok(output.includes(ruleId), `expected diagnostic ${ruleId}\n--- oxlint output ---\n${output}`);
   }
 
-  // Native ports of rules-of-hooks/exhaustive-deps are disabled in favor of
-  // the JS-plugin versions — each violation must be reported exactly once.
-  assert.ok(
-    !output.includes("react-hooks(rules-of-hooks)"),
-    `native rules-of-hooks should be off (deduped)\n--- oxlint output ---\n${output}`,
-  );
+  // Native ports are disabled in favor of the React team's JS-plugin
+  // implementations — each violation must be reported exactly once.
+  for (const ruleId of [
+    "react(rules-of-hooks)",
+    "react(exhaustive-deps)",
+    "react(set-state-in-render)",
+    "react(set-state-in-effect)",
+  ]) {
+    assert.ok(
+      !output.includes(ruleId),
+      `native ${ruleId} should be off\n--- oxlint output ---\n${output}`,
+    );
+  }
+});
+
+test("native React hook/compiler overlaps are explicitly disabled", () => {
+  for (const ruleId of nativeReactOverlaps) {
+    assert.equal(config.rules[ruleId], "off", `${ruleId} should defer to the JS plugin`);
+  }
 });
 
 test("clean fixture produces zero diagnostics", () => {
