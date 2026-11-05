@@ -199,6 +199,15 @@ asserts each layer fires: `rules-of-hooks`, `exhaustive-deps`, the compiler rule
 `no-env-var-destructuring`) — while asserting native ports do not duplicate them, plus a clean
 file that must produce zero diagnostics.
 
+CI runs those same clean and violations fixtures against both the advertised minimum Oxlint
+version (`1.79.0`) and the deployed consumer pin (`1.89.0`). Dependencies are installed from the
+lockfile with `npm ci`, then the matrix installs the selected Oxlint version exactly and verifies
+the binary version before running conformance tests.
+
+Type-aware linting remains a consumer opt-in. This preset and its compatibility suite do not
+enable it; consumers that want it should configure it in their own Oxlint invocation and supply
+the project-specific TypeScript setup it requires.
+
 ## License
 
 MIT

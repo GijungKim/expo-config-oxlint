@@ -8,11 +8,22 @@ on:
 
 jobs:
   test:
+    name: Oxlint ${{ matrix.oxlint-version }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        oxlint-version:
+          - 1.79.0
+          - 1.89.0
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      - run: npm install
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false oxlint@${{ matrix.oxlint-version }}
       - run: npm test
+        env:
+          OXLINT_VERSION: ${{ matrix.oxlint-version }}
