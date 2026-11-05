@@ -9,6 +9,7 @@ import config from "../index.js";
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const fixtureDir = path.join(testDir, "fixture");
 const oxlintBin = path.join(testDir, "..", "node_modules", ".bin", "oxlint");
+const expectedOxlintVersion = process.env.OXLINT_VERSION;
 
 const nativeReactOverlaps = [
   "react/rules-of-hooks",
@@ -37,9 +38,27 @@ function runOxlint(...files) {
   return result;
 }
 
+test(
+  "compatibility run uses the requested Oxlint version",
+  { skip: !expectedOxlintVersion },
+  () => {
+    const result = spawnSync(oxlintBin, ["--version"], { encoding: "utf8" });
+    const escapedVersion = expectedOxlintVersion.replaceAll(".", "\\.");
+    assert.equal(result.error, undefined, "oxlint should spawn");
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, new RegExp(`(?:^|\\s)${escapedVersion}(?:\\s|$)`));
+  },
+);
+
 test("violations fixture triggers every layer of the preset", () => {
-  const { stdout, stderr } = runOxlint("violations.tsx");
+  const { stdout, stderr, status } = runOxlint("violations.tsx");
   const output = stdout + stderr;
+
+  assert.equal(
+    status,
+    1,
+    `expected violations to fail lint\n--- oxlint output ---\n${output}`,
+  );
 
   const expected = [
     // native react-hooks layer via JS plugin
