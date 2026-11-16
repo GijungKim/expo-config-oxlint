@@ -93,6 +93,30 @@ export const jsPluginConfig = {
 };
 
 /**
+ * Oxlint ships native ports for most react-hooks/compiler rules. Its
+ * correctness category enables many of them by default. Prefer the React
+ * team's JS-plugin implementations above and disable every native overlap
+ * so each violation is reported exactly once.
+ */
+export const disabledNativeReactHooksCompilerRules = {
+  "react/rules-of-hooks": "off",
+  "react/exhaustive-deps": "off",
+  "react/error-boundaries": "off",
+  "react/globals": "off",
+  "react/immutability": "off",
+  "react/incompatible-library": "off",
+  "react/preserve-manual-memoization": "off",
+  "react/purity": "off",
+  "react/refs": "off",
+  "react/set-state-in-effect": "off",
+  "react/set-state-in-render": "off",
+  "react/static-components": "off",
+  "react/unsupported-syntax": "off",
+  "react/use-memo": "off",
+  "react/void-use-memo": "off",
+};
+
+/**
  * The full preset: oxlint-config-universe/native (Expo's own oxlint base
  * for React Native / Expo apps) merged with the JS-plugin rules above.
  */
@@ -103,25 +127,7 @@ const config = {
     ...(native.rules ?? {}),
     ...reactHooksRules,
     ...expoRules,
-    // Oxlint ships native ports for most react-hooks/compiler rules. Its
-    // correctness category enables many of them by default. Prefer the React
-    // team's JS-plugin implementations above and disable every native overlap
-    // so each violation is reported exactly once.
-    "react/rules-of-hooks": "off",
-    "react/exhaustive-deps": "off",
-    "react/error-boundaries": "off",
-    "react/globals": "off",
-    "react/immutability": "off",
-    "react/incompatible-library": "off",
-    "react/preserve-manual-memoization": "off",
-    "react/purity": "off",
-    "react/refs": "off",
-    "react/set-state-in-effect": "off",
-    "react/set-state-in-render": "off",
-    "react/static-components": "off",
-    "react/unsupported-syntax": "off",
-    "react/use-memo": "off",
-    "react/void-use-memo": "off",
+    ...disabledNativeReactHooksCompilerRules,
   },
 };
 
