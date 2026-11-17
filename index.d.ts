@@ -8,6 +8,7 @@ export type RuleSeverity = "off" | "warn" | "error";
 export declare const reactHooksJsPlugin: OxlintJsPlugin;
 export declare const expoJsPlugin: OxlintJsPlugin;
 export declare const reactHooksRules: Record<string, RuleSeverity>;
+export declare const disabledNativeReactHooksCompilerRules: Record<string, RuleSeverity>;
 export declare const expoRules: Record<string, RuleSeverity>;
 export declare const jsPluginConfig: {
   jsPlugins: OxlintJsPlugin[];
